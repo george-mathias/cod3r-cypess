@@ -1,0 +1,14 @@
+{
+  "name": "cod3r-cypess",
+  "version": "1.0.0",
+  "description": "curso de cypress da cod3r ministrado por Wagner Aquino",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "George Mathias",
+  "license": "MIT",
+  "dependencies": {
+    "cypress": "^8.5.0"
+  }
+}

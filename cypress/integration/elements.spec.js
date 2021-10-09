@@ -2,10 +2,15 @@
 
 describe('Work with basic elements', () => {
     
-    it('Text', () => {
-        
+    before(() => {
         cy.visit("/cypress/componentes.html")
-    
+    });
+
+    beforeEach(() => {
+        cy.reload()
+    });
+
+    it('Text', () => {
         cy.get('body').should('contain', 'Cuidado')
         cy.get('span').should('contain', 'Cuidado')
         cy.get('.facilAchar').should('contain', 'Cuidado')
@@ -13,8 +18,6 @@ describe('Work with basic elements', () => {
     });
 
     it.only('Links', () => {
-        cy.visit("/cypress/componentes.html")
-
         cy.xpath('//a[contains(text(),"Voltar")]').click()
         cy.get('#resultado').should('have.text', 'Voltou!')
         

@@ -85,4 +85,11 @@ describe('Work with basic elements', () => {
             .select('1graucomp')
             .should('have.value', '1graucomp')
     });
+
+    it('Combo multiplo', () => {
+        cy.get('[data-testid=dataEsportes]')
+            .select(['natacao', 'Corrida', 'nada'])
+
+        //TODO validar opções selecionadas do combo multiplo
+    });
 });

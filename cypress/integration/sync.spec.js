@@ -65,9 +65,18 @@ describe('Esperas...', () => {
             .should('have.length', 2)
     });
 
-    it.only('Click retry', () => {
+    it('Click retry', () => {
         cy.get('#buttonCount')
             .click()
             .should('have.value', '1')
+    });
+
+    it.only('Should vs Then', () => {
+        cy.get('#buttonListDOM').click()
+        cy.get('#lista li span').then($el => {
+            // console.log($el)            
+            expect($el).to.have.length(1)
+            cy.get('#buttonList')
+        })
     });
 });

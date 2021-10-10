@@ -48,7 +48,7 @@ describe('Esperas...', () => {
             .should('contain', 'Item 2')
     });
 
-    it.only('Uso do timeout', () => {
+    it('Uso do timeout', () => {
         // cy.get('#buttonDelay').click()
         // cy.get('#novoCampo').should('exist')
         // cy.get('#novoCampo', {timeout: 1000}).should('exist')
@@ -63,5 +63,11 @@ describe('Esperas...', () => {
             .should('have.length', 1)
         cy.get('#lista li span')
             .should('have.length', 2)
+    });
+
+    it.only('Click retry', () => {
+        cy.get('#buttonCount')
+            .click()
+            .should('have.value', '1')
     });
 });

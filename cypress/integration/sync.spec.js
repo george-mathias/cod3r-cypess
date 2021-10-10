@@ -39,12 +39,29 @@ describe('Esperas...', () => {
             .should('contain', 'Item 2')
     });
     
-    it.only('Uso do find-2', () => {
+    it('Uso do find-2', () => {
         cy.get('#buttonListDOM').click()
         cy.get('#lista li')
             .find('span')
             .should('contain', 'Item 1')
         cy.get('#lista li span')
             .should('contain', 'Item 2')
+    });
+
+    it.only('Uso do timeout', () => {
+        // cy.get('#buttonDelay').click()
+        // cy.get('#novoCampo').should('exist')
+        // cy.get('#novoCampo', {timeout: 1000}).should('exist')
+
+        // cy.get('#buttonListDOM').click()
+        // // cy.wait(3000) //não usar ou usar com muita cautela
+        // cy.get('#lista li span', {timeout: 6000})
+        //     .should('contain', 'Item 2')
+            
+        cy.get('#buttonListDOM').click()
+        cy.get('#lista li span')
+            .should('have.length', 1)
+        cy.get('#lista li span')
+            .should('have.length', 2)
     });
 });

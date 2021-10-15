@@ -9,6 +9,11 @@ describe('Work with iFrames', () => {
             cy.wrap(body).find('#tfield')
                 .type('funciona?')
                 .should('have.value', 'funciona?')
+
+            cy.on('window:alert', msg => {
+                expect(msg).to.equal('Alert Simples')
+            })
+            cy.wrap(body).find('#otherButton').click()
         })
     })
 });

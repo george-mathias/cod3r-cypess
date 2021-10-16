@@ -9,7 +9,13 @@ describe('Work with basic elements', () => {
         cy.reload()
     });
 
-    it('...', () => {
-        
+    it('Using jquery selector', () => {
+        // cy.get('input[onclick="javascript:fazerCadastro()"]')
+        cy.get('input[onclick="javascript:fazerCadastro()"]')
+        cy.get(':nth-child(1) > :nth-child(3) > [type="button"]')
+        cy.get('[onclick*=\'Francisco\']')
+        cy.get("[onclick*='Francisco']")
+        cy.get('#tabelaUsuarios td:contains(\'Doutorado\'):eq(0) ~ td:eq(3) > input')
+        cy.get('#tabelaUsuarios tr:contains(\'Doutorado\'):eq(0) td:eq(6) > input')
     });
 });

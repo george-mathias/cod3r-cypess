@@ -20,7 +20,10 @@ describe('Work with basic elements', () => {
     });
 
     //npm install cypress-xpath
-    it('Using xpath', () => {
-        cy.xpath('//input')
+    it.only('Using xpath', () => {
+        cy.xpath('//input[contains(@onclick, \'Francisco\')]')
+        cy.xpath('//input[contains(@onclick, \'Francisco\')]')
+        cy.xpath("//table[@id='tabelaUsuarios']//td[contains(., 'Francisco')]/..//input[@type='text']")
+        cy.xpath("//td[contains(., 'Usuario A')]/following-sibling::td[contains(., 'Mestrado')]/..//input[@type='text']").type('Funciona')
     });
 });

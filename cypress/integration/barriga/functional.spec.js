@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-describe('Should test a funcional level', () => {
+describe('Should test at a funcional level', () => {
     
     before(() => {
         cy.visit('https://barrigareact.wcaquino.me/')
@@ -10,7 +10,7 @@ describe('Should test a funcional level', () => {
         cy.get('.toast-message').should('contain', 'Bem vindo,')
     });
 
-    it('login', () => {
+    it('...', () => {
 
     });
 });

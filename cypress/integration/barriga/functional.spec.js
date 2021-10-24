@@ -5,14 +5,8 @@ import loc from '../../support/locators'
 describe('Should test at a funcional level', () => {
     
     before(() => {
-        cy.visit('https://barrigareact.wcaquino.me/')
-        cy.clearLocalStorage()
-        cy.reload()
-        cy.visit('https://barrigareact.wcaquino.me/')
-        cy.get(loc.LOGIN.USER).type('george@gmail.com')
-        cy.get(loc.LOGIN.PASSWORD).type('abc123')
-        cy.get(loc.LOGIN.BTN_LOGIN).click()
-        cy.get(loc.MESSAGE).should('contain', 'Bem vindo,')
+        cy.login('george@gmail.com', 'abc123')
+        cy.resetConta()
         // cy.get('[href="/reset"]') 
     });
 

@@ -1,6 +1,7 @@
 /// <reference types="Cypress-xpath" />
 
 import loc from '../../support/locators'
+import '../../support/commandsContas'
 
 describe('Should test at a funcional level', () => {
     
@@ -11,18 +12,13 @@ describe('Should test at a funcional level', () => {
     });
 
     it('Should a create an account', () => {
-        cy.get(loc.MENU.SETTINGS).click()
-        cy.get(loc.MENU.CONTAS).click()
-        cy.url().should('contain', '/contas')
-        
-        cy.get(loc.CONTAS.NOME).type('Conta de teste')
-        cy.get(loc.CONTAS.BTN_SALVAR).click()
+        cy.acessarMenuConta()
+        cy.inserirConta('Conta de teste')
         cy.get(loc.MESSAGE).should('contain', 'Conta inserida com sucesso')
     });
 
     it('should update an account', () => {
-        cy.get(loc.MENU.SETTINGS).click()
-        cy.get(loc.MENU.CONTAS).click()
+        cy.acessarMenuConta()
         cy.xpath(loc.CONTAS.XP_BTN_ALTERAR).click()
         cy.get(loc.CONTAS.NOME)
             .clear()

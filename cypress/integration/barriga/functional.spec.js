@@ -24,7 +24,12 @@ describe('Should test at a funcional level', () => {
             .clear()
             .type('Conta alterada')
         cy.get(loc.CONTAS.BTN_SALVAR).click()
-        cy.get(loc.MESSAGE).should('contain', 'Conta atualizada')
-  
+        cy.get(loc.MESSAGE).should('contain', 'Conta atualizada')  
+    });
+
+    it('should not cerate an account with same name', () => {
+        cy.acessarMenuConta()
+        cy.inserirConta('Conta alterada')
+        cy.get(loc.MESSAGE).should('contain', 'code 400')
     });
 });

@@ -12,17 +12,17 @@ describe('Should test at a funcional level', () => {
     });
 
     beforeEach(() => {
-        // cy.resetConta()
+        cy.resetRest(token)
     });
 
     it.only('Should a create an account', () => {
 
         // esta opção não foi passada pelo instrutor
-        cy.request({
-            url: 'https://barrigarest.wcaquino.me/reset',
-            method: 'GET',
-            headers: { Authorization: `JWT ${token}` }
-        })
+        // cy.request({
+        //     url: 'https://barrigarest.wcaquino.me/reset',
+        //     method: 'GET',
+        //     headers: { Authorization: `JWT ${token}` }
+        // })
 
         cy.request({
             url: 'https://barrigarest.wcaquino.me/contas',

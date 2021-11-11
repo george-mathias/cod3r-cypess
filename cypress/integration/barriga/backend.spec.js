@@ -15,17 +15,10 @@ describe('Should test at a funcional level', () => {
         cy.resetRest(token)
     });
 
-    it.only('Should a create an account', () => {
-
-        // esta opção não foi passada pelo instrutor
-        // cy.request({
-        //     url: 'https://barrigarest.wcaquino.me/reset',
-        //     method: 'GET',
-        //     headers: { Authorization: `JWT ${token}` }
-        // })
+    it('Should a create an account', () => {
 
         cy.request({
-            url: 'https://barrigarest.wcaquino.me/contas',
+            url: '/contas',
             method: 'POST',
             headers: {
                 Authorization: `JWT ${token}`
@@ -44,7 +37,7 @@ describe('Should test at a funcional level', () => {
 
     });
 
-    it.only('should update an account', () => {
+    it('should update an account', () => {
         cy.request({
             url: '/contas',
             method: 'GET',
@@ -55,7 +48,7 @@ describe('Should test at a funcional level', () => {
         }).then(res => { 
 
             cy.request({
-                url: `https://barrigarest.wcaquino.me/contas/${res.body[0].id}`,
+                url: `/contas/${res.body[0].id}`,
                 method: 'PUT',
                 followRedirect: false,
                 headers: { Authorization: `JWT ${token}` },
@@ -69,8 +62,28 @@ describe('Should test at a funcional level', () => {
         cy.get('@response').its('status').should('be.equal', 200)
     });
 
-    it('should not cerate an account with same name', () => {
+    it.only('should not cerate an account with same name', () => {
 
+        cy.request({
+            url: '/contas',
+            method: 'POST',
+            headers: {
+                Authorization: `JWT ${token}`
+            },
+            body: {
+                nome: 'Conta mesmo nome'
+            },
+            failOnStatusCode: false 
+        }).as('response')
+
+        cy.get('@response').then(res => {
+            console.log(res);
+            
+            expect(res.status).to.be.equal(400)
+            // expect(res.body).to.have.property('id')
+            expect(res.body).to.have.property('error', 'Já existe uma conta com esse nome!')
+            expect(res.body.error).to.be.equal('Já existe uma conta com esse nome!')
+        })
     });
 
     it('should create a transaction', () => {

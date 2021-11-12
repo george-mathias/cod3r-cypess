@@ -9,7 +9,8 @@
   "author": "George Mathias",
   "license": "MIT",
   "dependencies": {
-    "cypress": "^8.5.0"
+    "cypress": "^8.5.0",
+    "dayjs": "^1.10.7"
   },
   "devDependencies": {
     "cypress-xpath": "^1.6.2"

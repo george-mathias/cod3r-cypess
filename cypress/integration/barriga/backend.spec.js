@@ -1,7 +1,7 @@
 /// <reference types="Cypress-xpath" />
 
 describe('Should test at a funcional level', () => {
-    
+
     let token = null
     before(() => {
 
@@ -38,17 +38,11 @@ describe('Should test at a funcional level', () => {
     });
 
     it('should update an account', () => {
-        cy.request({
-            url: '/contas',
-            method: 'GET',
-            headers: { Authorization: `JWT ${token}` },
-            qs: {
-                nome: 'Conta para alterar'
-            }
-        }).then(res => { 
 
+        cy.getContaByName('Conta para alterar')
+        .then(contaId => {
             cy.request({
-                url: `/contas/${res.body[0].id}`,
+                url: `/contas/${contaId}`,
                 method: 'PUT',
                 followRedirect: false,
                 headers: { Authorization: `JWT ${token}` },
@@ -57,12 +51,12 @@ describe('Should test at a funcional level', () => {
                 }
             }).as('response')
         })
-        
+
 
         cy.get('@response').its('status').should('be.equal', 200)
     });
 
-    it.only('should not cerate an account with same name', () => {
+    it('should not cerate an account with same name', () => {
 
         cy.request({
             url: '/contas',
@@ -73,12 +67,10 @@ describe('Should test at a funcional level', () => {
             body: {
                 nome: 'Conta mesmo nome'
             },
-            failOnStatusCode: false 
+            failOnStatusCode: false
         }).as('response')
 
         cy.get('@response').then(res => {
-            console.log(res);
-            
             expect(res.status).to.be.equal(400)
             // expect(res.body).to.have.property('id')
             expect(res.body).to.have.property('error', 'Já existe uma conta com esse nome!')
@@ -87,6 +79,31 @@ describe('Should test at a funcional level', () => {
     });
 
     it('should create a transaction', () => {
+
+        const dayjs = require('dayjs')
+        let now = dayjs()
+
+        cy.getContaByName('Conta para movimentacoes')
+            .then(contaId => {
+                cy.request({
+                    url: '/transacoes',
+                    method: 'POST',
+                    headers: { Authorization: `JWT ${token}` },
+                    body: {
+                        conta_id: contaId,
+                        data_pagamento: now.add('1', 'day').format('DD/MM/YYYY'),
+                        data_transacao: now.format('DD/MM/YYYY'),
+                        descricao: "desc",
+                        envolvido: "inter",
+                        status: true,
+                        tipo: "REC",
+                        valor: "123",
+                    }
+                }).as('response')
+            })
+
+        cy.get('@response').its('status').should('be.equal', 201)
+        cy.get('@response').its('body.id').should('exist')
 
     });
 

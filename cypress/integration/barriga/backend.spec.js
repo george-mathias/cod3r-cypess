@@ -40,17 +40,17 @@ describe('Should test at a funcional level', () => {
     it('should update an account', () => {
 
         cy.getContaByName('Conta para alterar')
-        .then(contaId => {
-            cy.request({
-                url: `/contas/${contaId}`,
-                method: 'PUT',
-                followRedirect: false,
-                headers: { Authorization: `JWT ${token}` },
-                body: {
-                    nome: 'conta alterada vai rest'
-                }
-            }).as('response')
-        })
+            .then(contaId => {
+                cy.request({
+                    url: `/contas/${contaId}`,
+                    method: 'PUT',
+                    followRedirect: false,
+                    headers: { Authorization: `JWT ${token}` },
+                    body: {
+                        nome: 'conta alterada vai rest'
+                    }
+                }).as('response')
+            })
 
 
         cy.get('@response').its('status').should('be.equal', 200)
@@ -107,8 +107,61 @@ describe('Should test at a funcional level', () => {
 
     });
 
-    it('should get balance', () => {
+    it.only('should get balance', () => {
 
+        const dayjs = require('dayjs')
+        let now = dayjs()
+
+        cy.request({
+            url: "/saldo",
+            method: "GET",
+            headers: { Authorization: `JWT ${token}` }
+        }).then(res => {
+            let saldoConta = null
+            res.body.forEach(c => {
+                if (c.conta === 'Conta para saldo') {
+                    saldoConta = c.saldo
+                }
+            })
+            expect(saldoConta).to.be.equal('534.00')
+        })
+
+        cy.request({
+            url: 'transacoes',
+            method: 'GET',
+            headers: { Authorization: `JWT ${token}` },
+            qs: {descricao: 'Movimentacao 1, calculo saldo'}
+        }).then(res => {
+
+            cy.request({
+                url: `/transacoes/${res.body[0].id}`,
+                method: 'PUT',
+                headers: { Authorization: `JWT ${token}` },
+                body: {
+                    status: true,
+                    data_transacao: now.format('DD/MM/YYYY'),
+                    data_pagamento: now.add('1', 'day').format('DD/MM/YYYY'),
+                    descricao: res.body[0].descricao,
+                    envolvido: res.body[0].envolvido,
+                    valor: res.body[0].valor,
+                    conta_id: res.body[0].conta_id
+                }
+            }).its('status').should('be.equal', 200)
+        })
+
+        cy.request({
+            url: "/saldo",
+            method: "GET",
+            headers: { Authorization: `JWT ${token}` }
+        }).then(res => {
+            let saldoConta = null
+            res.body.forEach(c => {
+                if (c.conta === 'Conta para saldo') {
+                    saldoConta = c.saldo
+                }
+            })
+            expect(saldoConta).to.be.equal('4034.00')
+        })
     });
 
     it('should remove a transaction', () => {

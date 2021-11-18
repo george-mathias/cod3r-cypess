@@ -107,7 +107,7 @@ describe('Should test at a funcional level', () => {
 
     });
 
-    it.only('should get balance', () => {
+    it('should get balance', () => {
 
         const dayjs = require('dayjs')
         let now = dayjs()
@@ -130,7 +130,7 @@ describe('Should test at a funcional level', () => {
             url: 'transacoes',
             method: 'GET',
             headers: { Authorization: `JWT ${token}` },
-            qs: {descricao: 'Movimentacao 1, calculo saldo'}
+            qs: { descricao: 'Movimentacao 1, calculo saldo' }
         }).then(res => {
 
             cy.request({
@@ -164,7 +164,18 @@ describe('Should test at a funcional level', () => {
         })
     });
 
-    it('should remove a transaction', () => {
-
+    it.only('should remove a transaction', () => {
+        cy.request({
+            url: 'transacoes',
+            method: 'GET',
+            headers: { Authorization: `JWT ${token}` },
+            qs: { descricao: 'Movimentacao para exclusao' }
+        }).then(res => {
+            cy.request({
+                url: `/transacoes/${res.body[0].id}`,
+                method: 'DELETE',
+                headers: { Authorization: `JWT ${token}` }
+            }).its('status').should('be.equal', 204)
+        })
     });
 });

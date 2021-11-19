@@ -2,17 +2,17 @@
 
 describe('Should test at a funcional level', () => {
 
-    let token = null
+    // let token = null
     before(() => {
 
         cy.getToken('george@gmail.com', 'abc123')
-            .then(response => {
-                token = response
-            })
+            // .then(response => {
+            //     token = response
+            // })
     });
 
     beforeEach(() => {
-        cy.resetRest(token)
+        cy.resetRest()
     });
 
     it('Should a create an account', () => {
@@ -20,9 +20,9 @@ describe('Should test at a funcional level', () => {
         cy.request({
             url: '/contas',
             method: 'POST',
-            headers: {
-                Authorization: `JWT ${token}`
-            },
+            // headers: {
+            //     Authorization: `JWT ${token}`
+            // },
             body: {
                 nome: 'Conta via rest'
 
@@ -45,7 +45,7 @@ describe('Should test at a funcional level', () => {
                     url: `/contas/${contaId}`,
                     method: 'PUT',
                     followRedirect: false,
-                    headers: { Authorization: `JWT ${token}` },
+                    //headers: { Authorization: `JWT ${token}` },
                     body: {
                         nome: 'conta alterada vai rest'
                     }
@@ -61,9 +61,9 @@ describe('Should test at a funcional level', () => {
         cy.request({
             url: '/contas',
             method: 'POST',
-            headers: {
-                Authorization: `JWT ${token}`
-            },
+            // headers: {
+            //     Authorization: `JWT ${token}`
+            // },
             body: {
                 nome: 'Conta mesmo nome'
             },
@@ -88,7 +88,7 @@ describe('Should test at a funcional level', () => {
                 cy.request({
                     url: '/transacoes',
                     method: 'POST',
-                    headers: { Authorization: `JWT ${token}` },
+                    //headers: { Authorization: `JWT ${token}` },
                     body: {
                         conta_id: contaId,
                         data_pagamento: now.add('1', 'day').format('DD/MM/YYYY'),
@@ -115,7 +115,7 @@ describe('Should test at a funcional level', () => {
         cy.request({
             url: "/saldo",
             method: "GET",
-            headers: { Authorization: `JWT ${token}` }
+            //headers: { Authorization: `JWT ${token}` }
         }).then(res => {
             let saldoConta = null
             res.body.forEach(c => {
@@ -129,14 +129,14 @@ describe('Should test at a funcional level', () => {
         cy.request({
             url: 'transacoes',
             method: 'GET',
-            headers: { Authorization: `JWT ${token}` },
+            //headers: { Authorization: `JWT ${token}` },
             qs: { descricao: 'Movimentacao 1, calculo saldo' }
         }).then(res => {
 
             cy.request({
                 url: `/transacoes/${res.body[0].id}`,
                 method: 'PUT',
-                headers: { Authorization: `JWT ${token}` },
+                //headers: { Authorization: `JWT ${token}` },
                 body: {
                     status: true,
                     data_transacao: now.format('DD/MM/YYYY'),
@@ -152,7 +152,7 @@ describe('Should test at a funcional level', () => {
         cy.request({
             url: "/saldo",
             method: "GET",
-            headers: { Authorization: `JWT ${token}` }
+            //headers: { Authorization: `JWT ${token}` }
         }).then(res => {
             let saldoConta = null
             res.body.forEach(c => {
@@ -164,17 +164,17 @@ describe('Should test at a funcional level', () => {
         })
     });
 
-    it.only('should remove a transaction', () => {
+    it('should remove a transaction', () => {
         cy.request({
             url: 'transacoes',
             method: 'GET',
-            headers: { Authorization: `JWT ${token}` },
+            //headers: { Authorization: `JWT ${token}` },
             qs: { descricao: 'Movimentacao para exclusao' }
         }).then(res => {
             cy.request({
                 url: `/transacoes/${res.body[0].id}`,
                 method: 'DELETE',
-                headers: { Authorization: `JWT ${token}` }
+                //headers: { Authorization: `JWT ${token}` }
             }).its('status').should('be.equal', 204)
         })
     });

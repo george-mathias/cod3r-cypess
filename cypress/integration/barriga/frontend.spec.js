@@ -2,57 +2,21 @@
 
 import loc from '../../support/locators'
 import '../../support/commandsContas'
+import buildEnv from '../../support/buildEnv'
 
 describe('Should test at a funcional level', () => {
     after(() => {
         cy.clearLocalStorage()
     })
-
-    before(() => {
-        cy.server()
-        cy.route({
-            url: '/signin',
-            method: 'POST',
-            response: {
-                id: 1000,
-                nome: 'Usuario falso',
-                token: "Uma string muito grande que não deveria ser aceita, mas na verdade vai"
-            }
-        }).as('signin')
-        
-        cy.route({
-            url: '/saldo',
-            method: 'GET',
-            response: [{
-                conta_id: 999,
-                conta: 'carteira',
-                saldo: '100.00'
-            },
-            {
-                conta_id: 9909,
-                conta: 'banco',
-                saldo: '1000000.00'
-            }]
-        }).as('saldo')
-        
-        cy.login('george@gmail.com', 'senha errada')
-    })
-
+    
     beforeEach(() => {
+        buildEnv()
+        cy.login('george@gmail.com', 'senha errada')
         cy.get(loc.MENU.HOME).click()
     });
 
-    it.only('Should a create an account', () => {
-        cy.server()
-        cy.route({
-            url: '/contas',
-            method: 'GET',
-            response: [
-                { id: 1, nome:'Carteira', visivel: true, usuario_id: 1 },
-                { id: 2, nome:'Banco', visivel: true, usuario_id: 1 },
-            ]
-        }).as('/contas')
-
+    it('Should a create an account', () => {
+        
         cy.route({
             url: '/contas',
             method: 'POST',
@@ -77,13 +41,31 @@ describe('Should test at a funcional level', () => {
     });
 
     it('should update an account', () => {
+        buildEnv()
+        cy.route({
+            url: '/contas/**',
+            method: 'PUT',
+            response: { id: 1, nome:'Conta alterada', visivel: true, usuario_id: 1 }
+        }).as('contaParaAlteracao')
+        
         cy.acessarMenuConta()
-        cy.xpath(loc.CONTAS.FN_XP_BTN_ALTERAR('Conta para alterar')).click()
+        cy.route({
+            url: '/contas',
+            method: 'GET',
+            response: [
+                { id: 1, nome:'Carteira', visivel: true, usuario_id: 1 },
+                { id: 2, nome:'Banco', visivel: true, usuario_id: 1 },
+                { id: 3, nome:'Conta alterada', visivel: true, usuario_id: 1 }
+            ]
+        }).as('contaAtualizada')
+        
+        cy.acessarMenuConta()
+        cy.xpath(loc.CONTAS.FN_XP_BTN_ALTERAR('Carteira')).click()
         cy.get(loc.CONTAS.NOME)
-            .clear()
-            .type('Conta alterada')
+        .clear()
+        .type('Conta alterada')
         cy.get(loc.CONTAS.BTN_SALVAR).click()
-        cy.get(loc.MESSAGE).should('contain', 'Conta atualizada')
+        cy.get(loc.MESSAGE).should('contain', 'Conta atualizada com sucesso')
     });
 
     it('should not cerate an account with same name', () => {

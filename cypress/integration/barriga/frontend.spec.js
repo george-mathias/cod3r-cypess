@@ -4,6 +4,9 @@ import loc from '../../support/locators'
 import '../../support/commandsContas'
 
 describe('Should test at a funcional level', () => {
+    after(() => {
+        cy.clearLocalStorage()
+    })
 
     before(() => {
         cy.server()
